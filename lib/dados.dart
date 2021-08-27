@@ -1,33 +1,41 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
+import 'package:json_annotation/json_annotation.dart';
+part 'dados.g.dart';
 
-/*Future main() async{
-  final json = await fetch();
+ /*Future main() async{
+  final DadosRepository repository = DadosRepository();
+  final json = await repository.fetch();
   print(json['comPresenca']);
 }
-
-Future<Map> fetch() async{
-  var url = Uri.parse('https://tangerino-resources-stg.s3.us-east-2.amazonaws.com/resources-web/desafio_mobile_estagio.json');
-  var response = await http.get(url);
-  var json = jsonDecode(response.body);
-  return json;
-}*/
-
-
+*/
 class DadosRepository {
-  //final json = await fetch();
-  //print(json['funcionariosAtivos']);
+  final dio = Dio();
+  final url = 'https://tangerino-resources-stg.s3.us-east-2.amazonaws.com/resources-web/desafio_mobile_estagio.json';
 
-  Future<Map> fetch() async{
-  var url = Uri.parse('https://tangerino-resources-stg.s3.us-east-2.amazonaws.com/resources-web/desafio_mobile_estagio.json');
-  var response = await http.get(url);
-  var json = jsonDecode(response.body);
-  return json;
+  /*Future<Map> fetch() async {
+    var url = Uri.parse(
+        'https://tangerino-resources-stg.s3.us-east-2.amazonaws.com/resources-web/desafio_mobile_estagio.json');
+    var response = await http.get(url);
+    var json = jsonDecode(response.body);
+    return json;
+  }*/
+
+ Future fetchDados()async{
+    final response = await dio.get(url);
+    final list = response.data.toString() as List;
+    List<Dados> dados = [];
+
+    for (var json in list){
+      final dado = _$DadosFromJson(json);
+      dados.add(dado);
+    }
+    return dados;
   }
 }
 
+@JsonSerializable()
 class Dados {
     Dados({
         required this.funcionariosAtivos,
@@ -47,9 +55,13 @@ class Dados {
     final int emFerias;
     final int comHoraExtra;
 
-    factory Dados.fromJson(String str) => Dados.fromMap(json.decode(str));
+    //factory Dados.fromJson(String str) => Dados.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+    //String toJson() => json.encode(toMap());
+
+    factory Dados.fromJson(Map<String, dynamic> json) => _$DadosFromJson(json);
+
+    Map<String, dynamic> toJson() => _$DadosToJson(this);
 
     factory Dados.fromMap(Map<String, dynamic> json) => Dados(
         funcionariosAtivos: List<FuncionariosAtivo>.from(json["funcionariosAtivos"].map((x) => FuncionariosAtivo.fromMap(x))),

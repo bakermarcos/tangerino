@@ -6,8 +6,10 @@ import 'package:tangerino/dados.dart';
 import 'package:tangerino/funcionariosAtivos.dart';
 import 'package:tangerino/login.dart';
 
-void main() {
-  //WidgetsFlutterBinding.ensureInitialized();
+import 'homeController.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     theme: ThemeData(primaryColor: Color(0xffff5f11),
     backgroundColor: Colors.white,
@@ -23,10 +25,12 @@ void main() {
     },));
 }
 
-final DadosRepository controller = DadosRepository();
-_database() async {
-  final json = await controller.fetch();
-}
+/*_database() async{
+  final DadosRepository repository = DadosRepository();
+  final json = await repository.fetch();
+  return json;
+}*/
+
 class MyApp extends StatefulWidget {
   const MyApp({ Key? key }) : super(key: key);
 
@@ -36,23 +40,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var date = DateTime.now();
-  
+  //final controller = HomeController();
+  //final json = _database();
 
   @override
-  void initState(){
-    _database();
+  void initState() {
     super.initState();
+    //controller.start();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      //adicionar menu e botão de recarregar
-
       appBar: AppBar(title: Container(alignment: Alignment.center,
       child: Text('Home'),
       ),
+      backgroundColor: Color(0xffff9f21),
       ),
       body: Center(
         child: Column(
@@ -65,16 +69,12 @@ class _MyAppState extends State<MyApp> {
           ),
           Padding(padding: EdgeInsets.all(10)),
 
-          //Substituir container pelo gráfico
-
           Container(
             width: 200,
             height: 200,
-            color: Color(0xffff9f21),
+            color: Colors.indigo[100],
           ),
           Padding(padding: EdgeInsets.all(15)),
-
-          //Colocar dados nos containers
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +91,7 @@ class _MyAppState extends State<MyApp> {
                       child: Column(
                         children: [
                           Text(
-                            '${json['comPresenca']}',
+                            'N°',
                             style: TextStyle(color: Colors.white,
                             fontSize: 35,
                             ),

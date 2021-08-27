@@ -54,12 +54,6 @@ class _FuncionariosPageState extends State<FuncionariosPage> {
                         fontSize: MediaQuery.of(context).size.height * 0.03,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'status',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.024,
-                    ),
-                  ),
                 ],
               ),
             )
